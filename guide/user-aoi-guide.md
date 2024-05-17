@@ -1,4 +1,10 @@
-#user sign up
+## #user sign up
+
+-database user record save
+-nodemailer service module
+-async await nodemailer service
+email from req.body ,send welcome
+user email{event or async asait}
 
 #user login
 --input req.body=>email,password
