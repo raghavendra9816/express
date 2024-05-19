@@ -11,7 +11,6 @@ const userSchema = joi.object({
   roles: joi.array().items(joi.string().valid("admin", "user")),
   image: joi.string(),
   isEmailVerified: joi.boolean(),
-  //otp: joi.string(),
 });
 // middleware define
 const validator = async (req, res, next) => {

@@ -19,7 +19,7 @@ const userschema = new Schema(
     roles: [
       {
         type: Array,
-        default: "user",
+        default: ["user"],
         required: true,
       },
     ],
@@ -28,7 +28,7 @@ const userschema = new Schema(
     isEmailVerified: { type: Boolean, required: true, default: false },
     isActive: { type: Boolean, required: true, default: true },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 module.exports = model("User", userschema);

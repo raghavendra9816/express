@@ -38,8 +38,8 @@ const login = async (payload) => {
 };
 const create = async (payload) => {
   const { email, password } = payload;
-  const duplicateEmail = await usermodel.findOne({ email });
-  if (!duplicateEmail) throw new Error("Email is already in use");
+  // const duplicateEmail = await usermodel.findOne({ email });
+  // if (!duplicateEmail) throw new Error("Email is already in use");
   payload.password = generateHash(password);
   const result = await usermodel.create(payload);
   // call the node mailer
@@ -58,14 +58,14 @@ const updateById = (id, payload) => {
 const removeById = (id) => {
   return usermodel.deleteOne({ _id: id });
 };
-const generateEmailToken = (payload) => {
+const generateEmailToken = async (payload) => {
   const { email } = payload;
-  const user = usermodel.findOne({ email, isActive: true });
+  const user = await usermodel.findOne({ email, isActive: true });
   if (!user) throw new Error("user not found");
   const isVerified = user?.isEmailVerified;
   if (!isVerified) {
     const otp = generateOtp();
-    const updateduser = usermodel.updateOne({ _id: user?._id }, { otp });
+    const updateduser = await usermodel.updateOne({ _id: user?._id }, { otp });
     if (!updateduser) throw new Error("something went wrong");
     console.log({ otp });
     eventEmitter.emit("emailverification", email, otp);
@@ -75,10 +75,15 @@ const generateEmailToken = (payload) => {
 
 const verifyEmailToken = async (payload) => {
   const { email, token } = payload;
+
   const user = await usermodel.findOne({ email, isActive: true });
+
   if (!user) throw new Error("user not found");
+
   const isTokenValid = user?.otp === token;
+  console.log({ isTokenValid });
   if (!isTokenValid) throw new Error("Token is missing");
+
   const result = await usermodel.updateOne(
     { _id: user?._id },
     { isEmailVerified: true, otp: "" }
