@@ -4,6 +4,16 @@ const indexRouter = require("./routes");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 
+// MONGO DB CONNECTION
+mongoose
+  .connect(process.env.DB_URL)
+  .then(() => {
+    console.log("MONGODB CONNECTED SUCCESSFULLY");
+  })
+  .catch((e) => {
+    console.log("Database error:", e);
+  });
+
 const app = express();
 const PORT = process.env.PORT || 9000;
 
@@ -24,7 +34,6 @@ app.use((req, res, next) => {
 
 //i am the routing mechanism, i will send the API request from / to indexRouter
 app.use("/", indexRouter);
-mongoose.connect("mongodb://localhost:27017/moviemate")``;
 
 //error handler
 app.use((err, req, res, next) => {

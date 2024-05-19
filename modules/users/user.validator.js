@@ -6,8 +6,12 @@ const userSchema = joi.object({
     .string()
     .email({ minDomainSegments: 1, tlds: { allow: ["com"] } })
     .required(),
-  gender: joi.string().valid("m", "f", "o"),
-  profile: joi.string(),
+  password: joi.string().required(),
+
+  roles: joi.array().items(joi.string().valid("admin", "user")),
+  image: joi.string(),
+  isEmailVerified: joi.boolean(),
+  //otp: joi.string(),
 });
 // middleware define
 const validator = async (req, res, next) => {

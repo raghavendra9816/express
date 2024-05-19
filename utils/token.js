@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const generateToken = (payload) =>
   jwt.sign(
@@ -10,4 +11,11 @@ const generateToken = (payload) =>
   );
 
 const verifyToken = (token) => jwt.verify(token, process.env.JWT_SECRET);
-module.exports = { generateToken, verifyToken };
+const checkRole = ({ sysRole, userRole }) => {
+  userRole.some((role) => sysRole.includes(role));
+};
+const generateOtp = () => {
+  return crypto.randomInt(100000, 999999);
+};
+
+module.exports = { generateOtp, checkRole, generateToken, verifyToken };
