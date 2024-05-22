@@ -15,14 +15,13 @@ const userschema = new Schema(
       //   message: (props) => `${props.value} is not validate email`,
       // },
     },
-    password: { type: String, required: true },
-    roles: [
-      {
-        type: Array,
-        default: ["user"],
-        required: true,
-      },
-    ],
+    password: { type: String, required: true, select: false }, //select :false le password aaudaina database ma
+    roles: {
+      type: Array,
+      required: true,
+      default: ["user"],
+    },
+
     image: { type: String },
     otp: { type: String },
     isEmailVerified: { type: Boolean, required: true, default: false },

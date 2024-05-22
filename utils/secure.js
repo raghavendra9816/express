@@ -1,36 +1,37 @@
-//check role module
-
-const checkrole = (userrole, sysrole) =>
-  userrole.some((item) => sysrole.includes(item));
-
 const { checkRole, verifyToken } = require("./token");
-const secure = (sysRole) => {
-  return (req, res, next) => {
+const userModel = require("../modules/users/user.model");
+
+const secure = (sysRole = []) => {
+  return async (req, res, next) => {
     try {
       const { access_token } = req.headers;
-      //what to do if no token
+      // what to do if no token
       if (!access_token) throw new Error("Token is missing");
-      //check the token is valid or not
+      // check the token is valid or not
       const isValid = verifyToken(access_token);
-      //token expired
 
-      if (!isValid) throw new Error("tToken is expired");
+      // token expired??
+      if (!isValid) throw new Error("Token expired");
       const { data } = isValid;
-      const validRole = checkRole({ sysRole, userRole: data?.roles || [] });
-      if (!validRole) throw new Error("user unauthorized");
+
+      // Check user email with database
+      const userInfo = await userModel.findOne({
+        email: data?.email,
+        isActive: true,
+        isEmailVerified: true,
+      });
+
+      if (!userInfo) throw new Error("user not found");
+      // RBAC vs PBAC vs ABAC
+      const validRole = checkRole({ sysRole, userRole: userInfo?.roles || [] });
+
+      if (!validRole) throw new Error("User unauthorized");
+      req.currentUser = userInfo?._id;
       next();
     } catch (e) {
       next(e);
     }
   };
 };
-const mw = (sysRole) => {
-  return (req, res, next) => {
-    const { role } = req.headers;
-    console.log({ userrole: role, sysRole: sysRole });
-    const result = checkrole([role], sysRole);
-    if (!result) res.status(404).json({ msg: "unauthorized access" });
-    next();
-  };
-};
-module.exports = { checkrole, mw, secure };
+
+module.exports = { secure };

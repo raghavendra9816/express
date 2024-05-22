@@ -1,19 +1,3 @@
-/*
-register user
-login user
-forget password
-change password
-reset password
-verify token
-change ststus of user
-delet user
-update user
-update my profile
-get one user
-
-
-*/
-
 const router = require("express").Router();
 require("dotenv").config();
 const multer = require("multer");
@@ -36,19 +20,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage, createParentPath: true });
-
-router.get("/", (req, res, next) => {
-  res.json({ msg: "user is running" });
-});
-
-// list of users
-router.get("/", secure(["admin"]), (req, res, next) => {
-  try {
-    res.json({ msg: "list of all user" });
-  } catch (e) {
-    next(e);
-  }
-});
 
 // register user
 router.post(
@@ -100,84 +71,87 @@ router.post("/verify-email", async (req, res, next) => {
     next(e);
   }
 });
-//forgot password
-// router.post("/:id", (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     res.json({ mag: `forgot password by id ${id}` });
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-//change password
-//router.patch("/:id", (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     res.json({ mag: "password is changed" });
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-//reset password
-// router.post("/", (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     res.json({ mag: "password is reset" });
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-////verify token
-// router.post("/:id", (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     res.json({ mag: "token is verified" });
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-// //change ststus of user
-// router.patch("/", (req, res, next) => {
-//   try {
-//     res.json({ mag: "status is changed" });
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-// //delet user
-// router.delete("/:id", (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     res.json({ mag: "user is deleted" });
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-// //update user
-// router.patch("/:id", (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     res.json({ mag: `user is updated by id ${id}` });
-//   } catch (e) {
-//     next(e);
-//   }
-// });
 
-// //update my profile
-// router.patch("/", (req, res, next) => {
-//   try {
-//     res.json({ mag: "profile is updated" });
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-// //get one user
-// router.get("/:id", (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     res.json({ mag: `get the user by id ${id}` });
-//   } catch (e) {
-//     next(e);
-//   }
-// });
+// list of users
+router.get("/list", secure(["admin"]), async (req, res, next) => {
+  try {
+    //tOdo aDVANCE oPERATION
+    const data = await usercontroller.list();
+    console.log({ data });
+    res.json({ msg: "list of all user", data });
+  } catch (e) {
+    next(e);
+  }
+});
+
+//user id block patch method is for single data update garna
+router.patch("/:id/block", secure(["admin"]), async (req, res, next) => {
+  try {
+    const payload = req.params.id;
+    const result = await usercontroller.blockuser(payload);
+    res.json({ msg: "user status updated successfully", data: result });
+  } catch (e) {
+    next(e);
+  }
+});
+
+//delet user
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const result = await usercontroller.removeById(req.params.id);
+    console.log({ result });
+    res.json({ msg: "user deleted successfully", data: result });
+  } catch (e) {
+    next(e);
+  }
+});
+
+//user profile
+router.get("/profile", secure(), async (req, res, next) => {
+  try {
+    const result = await usercontroller.getProfile(req.currentUser);
+    console.log({ result });
+    res.json({ msg: "user profile generated", data: result });
+  } catch (e) {
+    next(e);
+  }
+});
+
+//update =>put method for dherai data update garna
+router.put("/profile", async (req, res, next) => {
+  try {
+  } catch (e) {
+    next(e);
+  }
+});
+//user detail of each individual user
+router.get("/id", async (req, res, next) => {
+  try {
+  } catch (e) {
+    next(e);
+  }
+});
+
+//change password
+router.post("/change-password", async (req, res, next) => {
+  try {
+  } catch (e) {
+    next(e);
+  }
+});
+//reset password
+router.post("/reset-password", async (req, res, next) => {
+  try {
+  } catch (e) {
+    next(e);
+  }
+});
+//forget password
+router.post("/forget-password", (req, res, next) => {
+  try {
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = router;

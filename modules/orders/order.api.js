@@ -8,7 +8,7 @@ change the ststus of order
 */
 
 const router = require("express").Router();
-const { mw } = require("../../utils/secure");
+//const { mw } = require("../../utils/secure");
 
 //specific router level middleware
 // const mw = (req, res, next) => {
@@ -21,7 +21,7 @@ const { mw } = require("../../utils/secure");
 // };
 
 //
-router.get("/", mw(["admin"]), (req, res, next) => {
+router.get("/", (req, res, next) => {
   try {
     res.json({ msg: "orders api", data: req.body });
   } catch (e) {
@@ -29,7 +29,7 @@ router.get("/", mw(["admin"]), (req, res, next) => {
   }
 });
 //create
-router.post("/", mw(["user", "admin"]), (req, res, next) => {
+router.post("/", (req, res, next) => {
   try {
     res.json({ msg: "created one order" });
   } catch (e) {

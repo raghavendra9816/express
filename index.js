@@ -38,7 +38,7 @@ app.use("/", indexRouter);
 //error handler
 app.use((err, req, res, next) => {
   const errorMsg = err ? err.toString() : "something went wrong";
-  res.status(500).json({ msg: "server error message" });
+  res.status(500).json({ msg: errorMsg });
 });
 
 // Run the application on the specified port

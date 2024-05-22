@@ -6,13 +6,15 @@
 email from req.body ,send welcome
 user email{event or async asait}
 
-#user login
+# user login
+
 --input req.body=>email,password
 -if email and password doesnt match =>throw error
 
     ooutput=>jwt token
 
-#for sign up flow of code
+# for sign up flow of code
+
 -api end point (msg:user sign upccessfully)/register
 -usercontroller.register()
 -register controller
@@ -23,7 +25,7 @@ user email{event or async asait}
     4.usermodel.create(payload)
     5.email signup(email notofocation)
 
-    --user login
+    # user login
     -api endpoint (/login)
     -usercontrol.login()
     -login controller
@@ -35,8 +37,8 @@ user email{event or async asait}
     5.if invalid throw new error
     6.return true
 
+# email token generatoe
 
-    email token generatoe
     -api endpoint(/generate-email-token)
 
     1.email exist ; isactive:true
@@ -46,13 +48,28 @@ user email{event or async asait}
     4.store te otp in the user database
     5.email that otp
 
-    --email token verificaton
-    -api endpoint(/verify-email-token)
+    # email token verificaton
+      api endpoint(/verify-email-token)
 
     1.email exist ; isactive:true
     2.compare otp
     3.if verified ,update user database with isemailverified:true,otp:""
     4.else token is invalid
 
+# user list (admin)
 
-    1.
+# user block(admin)
+
+# user delete(admin)
+
+# get user profile(user,admin)
+
+# update user profile(user,admin)
+
+# get user details(admin)
+
+# user password change(user)
+
+# user password reset(admin)
+
+# user forget password (user,admin)

@@ -11,11 +11,10 @@ const generateToken = (payload) =>
   );
 
 const verifyToken = (token) => jwt.verify(token, process.env.JWT_SECRET);
-const checkRole = ({ sysRole, userRole }) => {
-  userRole.some((role) => sysRole.includes(role));
-};
+const checkRole = ({ sysRole, userRole }) =>
+  sysRole.length === 0 ? true : userRole.some((role) => sysRole.includes(role));
 const generateOtp = () => {
   return crypto.randomInt(100000, 999999);
 };
 
-module.exports = { generateOtp, checkRole, generateToken, verifyToken };
+module.exports = { generateOtp, generateToken, verifyToken, checkRole };

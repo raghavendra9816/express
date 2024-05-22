@@ -1,4 +1,10 @@
 /* 
+-------interview point of view ------
+->Rbac
+->pbac
+->abac
+
+
 Hamle jaila ne copy data  haru matra change garchau
 hamle handlemethod ma lekhako code  main index.js
 server express ko server create garne ra ra handlemethod ko code paste garne
