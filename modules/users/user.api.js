@@ -118,37 +118,71 @@ router.get("/profile", secure(), async (req, res, next) => {
 });
 
 //update =>put method for dherai data update garna
-router.put("/profile", async (req, res, next) => {
+router.put("/profile", secure(), async (req, res, next) => {
   try {
+    const result = await usercontroller.updateById(req.currentUser, req.body);
+    res.json({ msg: "updated successfullly", data: result });
   } catch (e) {
     next(e);
   }
 });
 //user detail of each individual user
-router.get("/id", async (req, res, next) => {
+router.get("/:id", secure(["admin"]), async (req, res, next) => {
   try {
+    const result = await usercontroller.getbyId(req.params.id);
+    res.json({ msg: "user detail generated ", data: result });
   } catch (e) {
     next(e);
   }
 });
 
 //change password
-router.post("/change-password", async (req, res, next) => {
-  try {
-  } catch (e) {
-    next(e);
+router.post(
+  "/change-password",
+  secure(["user", "admin"]),
+  async (req, res, next) => {
+    try {
+      const result = await usercontroller.changePassword(
+        req.currentUser,
+        req.body
+      );
+      res.json({ msg: "password change successfully", data: result });
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 //reset password
-router.post("/reset-password", async (req, res, next) => {
+router.post("/reset-password", secure(["admin"]), async (req, res, next) => {
   try {
+    const { id, newPassword } = req.body;
+    if (!id || !newPassword) throw new Error("Somethjing is missing");
+
+    const result = await usercontroller.resetPassword(id, newPassword);
+    res.json({ msg: "password Reset successfully", data: result });
   } catch (e) {
     next(e);
   }
 });
 //forget password
-router.post("/forget-password", (req, res, next) => {
+router.post("/forget-password-token", async (req, res, next) => {
   try {
+    const result = await usercontroller.forgotPasswordTokenGen(req.body);
+    res.json({
+      msg: "Forgot Password Token Generate successfully",
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+});
+router.post("/forget-password", async (req, res, next) => {
+  try {
+    const result = await usercontroller.forgotPasswordChange(req.body);
+    res.json({
+      msg: " Password change successfully",
+      data: result,
+    });
   } catch (e) {
     next(e);
   }
